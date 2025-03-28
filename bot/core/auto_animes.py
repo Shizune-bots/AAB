@@ -112,7 +112,7 @@ async def get_animes(name, torrent, force=False):
                     if len(btns) != 0 and len(btns[-1]) == 1:
                         btns[-1].insert(1, InlineKeyboardButton(f"{btn_formatter[qual]}", url=link))
                     else:
-                        btns.append([InlineKeyboardButton(f"{btn_formatter[qual]} - {convertBytes(msg.document.file_size)}", url=link)])
+                        btns.append([InlineKeyboardButton(f"{btn_formatter[qual]}", url=link)])
                     await editMessage(post_msg, post_msg.caption.html if post_msg.caption else "", InlineKeyboardMarkup(btns))
                     
                 await db.saveAnime(ani_id, ep_no, qual, post_id)
