@@ -1,30 +1,32 @@
-from time import sleep
+import asyncio
 from pyrogram.errors import FloodWait
 from bot import Var, LOGS, bot
 
 class Reporter:
-    def __init__(self, client, chat_id, log):
+    def __init__(self, client, chat_id, logger):
         self.__client = client
         self.__cid = chat_id
-        self.__logger = log
+        self.__logger = logger
+        self.__log_levels = {
+            "error": self.__logger.error,
+            "warning": self.__logger.warning,
+            "critical": self.__logger.critical,
+            "info": self.__logger.info,
+        }
 
     async def report(self, msg, log_type, log=True):
-        txt = [f"[{log_type.upper()}] {msg}", log_type.lower()]
-        if txt[1] == "error":
-            self.__logger.error(txt[0])
-        elif txt[1] == "warning":
-            self.__logger.warning(txt[0])
-        elif txt[1] == "critical":
-            self.__logger.critical(txt[0])
-        else:
-            self.__logger.info(txt[0])
-        if log and self.__cid != 0:
+        log_type = log_type.lower()
+        log_msg = f"[{log_type.upper()}] {msg}"
+
+        self.__log_levels.get(log_type, self.__logger.info)(log_msg)
+
+        if log and self.__cid:
             try:
-                await self.__client.send_message(self.__cid, f"{txt[0][:4096]}")
-            except FloodWait as f:
-                self.__logger.warning(str(f))
-                sleep(f.value * 1.5)
+                await self.__client.send_message(self.__cid, log_msg[:4096])
+            except FloodWait as e:
+                self.__logger.warning(f"FloodWait: {e}")
+                await asyncio.sleep(e.value * 1.5)
             except Exception as err:
-                self.__logger.error(str(err))
+                self.__logger.error(f"Report Error: {err}")
 
 rep = Reporter(bot, Var.LOG_CHANNEL, LOGS)
