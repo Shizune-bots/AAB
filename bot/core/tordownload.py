@@ -6,10 +6,12 @@ from aiofiles.os import path as aiopath, remove as aioremove, mkdir
 from aiohttp import ClientSession
 from bot import LOGS
 from bot.core.func_utils import handle_logs
+
 class TorDownloader:
     def __init__(self, path="downloads"):
         self.__downdir = path
         self.__torpath = "torrents/"
+
     @handle_logs
     async def download(self, torrent: str, name: str = None) -> str:
         """
@@ -19,10 +21,15 @@ class TorDownloader:
         :return: Path to the downloaded file or None if failed
         """
         if torrent.startswith("magnet:"):
-            return await self._download_with_aria2(torrent, name)        elif torfile := await self.get_torfile(torrent):
-            return await self._download_with_aria2(torfile, name)        else:
+            return await self._download_with_aria2(torrent, name)
+        
+        elif torfile := await self.get_torfile(torrent):
+            return await self._download_with_aria2(torfile, name)
+        
+        else:
             LOGS.error("Failed to retrieve torrent metadata. Possible invalid magnet link.")
             return None
+
     @handle_logs
     async def _download_with_aria2(self, source: str, name: str = None) -> str:
         """
@@ -46,15 +53,19 @@ class TorDownloader:
             "--continue=true",
             source,
         ]
-        process = await asyncio.create_subprocess_exec(*command,
-stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        
+        process = await asyncio.create_subprocess_exec(
+            *command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
         stdout, stderr = await process.communicate()
+        
         if process.returncode == 0:
             LOGS.info(f"Download completed: {name if name else source}")
             return self.__downdir
         else:
             LOGS.error(f"aria2c failed: {stderr.decode().strip()}")
             return None
+
     @handle_logs
     async def get_torfile(self, url: str) -> str:
         """
@@ -64,8 +75,10 @@ stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         """
         if not await aiopath.isdir(self.__torpath):
             await mkdir(self.__torpath)
+        
         tor_name = url.split('/')[-1]
         des_dir = ospath.join(self.__torpath, tor_name)
+        
         async with ClientSession() as session:
             async with session.get(url) as response:
                 if response.status == 200:
