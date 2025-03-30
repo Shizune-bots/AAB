@@ -8,6 +8,8 @@ from base64 import urlsafe_b64encode
 from time import time
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
+from bot.modules
+import separate_channel
 from bot import bot, bot_loop, Var, ani_cache, ffQueue, ffLock, ff_queued
 from .tordownload import TorDownloader
 from .database import db
