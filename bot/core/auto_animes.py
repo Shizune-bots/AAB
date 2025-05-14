@@ -54,12 +54,12 @@ async def get_animes(name, torrent, force=False):
                 return
             
             await rep.report(f"New Anime Torrent Found!\n\n{name}", "info")
-            #post_msg = await bot.send_photo(
-             #   Var.MAIN_CHANNEL,
-               # photo=await aniInfo.get_poster(),
-               # caption=await aniInfo.get_caption()
-          #  )
-            post_msg = await sendMessage(Var.MAIN_CHANNEL, (await aniInfo.get_caption()).format(await aniInfo.get_poster()), invert_media=True)
+            post_msg = await bot.send_photo(
+                Var.MAIN_CHANNEL,
+                photo=await aniInfo.get_poster(),
+                caption=await aniInfo.get_caption()
+            )
+            #post_msg = await sendMessage(Var.MAIN_CHANNEL, (await aniInfo.get_caption()).format(await aniInfo.get_poster()), invert_media=True)
             
             await asleep(1.5)
             stat_msg = await sendMessage(Var.MAIN_CHANNEL, f"‣ <b>Anime Name :</b> <b><i>{name}</i></b>\n\n<i>Downloading...</i>")
