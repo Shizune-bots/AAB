@@ -2,7 +2,7 @@ from pyrogram import Client, filters
 from bot.core.database import db
 from bot import Var
 
-@Client.on_message(filters.command("setchannel") & filters.user(Var.OWNER_ID))
+@Client.on_message(filters.command("setchannel") & filters.user(Var.ADMINS))
 async def set_channel(client, message):
     """Command: /setchannel <anime_name> <channel_id>"""
     args = message.text.split(maxsplit=2)
@@ -17,7 +17,7 @@ async def set_channel(client, message):
     await db.set_separate_channel(anime_name, channel_id)
     await message.reply(f"✅ Separate channel set for **{anime_name}** → `{channel_id}`")
 
-@Client.on_message(filters.command("listchannels") & filters.user(Var.OWNER_ID))
+@Client.on_message(filters.command("listchannels") & filters.user(Var.ADMINS))
 async def list_channels(client, message):
     """Command: /listchannels"""
     channels = await db.get_all_separate_channels()
@@ -31,7 +31,7 @@ async def list_channels(client, message):
     
     await message.reply(msg)
 
-@Client.on_message(filters.command("removechannel") & filters.user(Var.OWNER_ID))
+@Client.on_message(filters.command("removechannel") & filters.user(Var.ADMINS))
 async def remove_channel(client, message):
     """Command: /removechannel <anime_name>"""
     args = message.text.split(maxsplit=1)
