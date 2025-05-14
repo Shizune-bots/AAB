@@ -8,7 +8,7 @@ from bot import LOGS
 from bot.core.func_utils import handle_logs
 
 class TorDownloader:
-    def __init__(self, path="downloads"):
+    def __init__(self, path="."):
         self.__downdir = path
         self.__torpath = "torrents/"
 
