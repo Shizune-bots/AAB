@@ -15,4 +15,4 @@ tgcrypto
 torrentp
 git+https://github.com/kaif-00z/html-telegraph-poster
 uvloop
-lxml_html_clean
+lxml[html_clean]
