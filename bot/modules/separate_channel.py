@@ -1,5 +1,6 @@
 from pyrogram import Client, filters
 from bot.core.database import db
+from bot import Var
 
 @Client.on_message(filters.command("setchannel") & filters.user(Var.OWNER_ID))
 async def set_channel(client, message):
