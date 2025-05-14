@@ -197,7 +197,7 @@ class TextEditor:
     @handle_logs
     async def get_upname(self, qual=""):
         anime_name = self.pdata.get("anime_title")
-        codec = 'HEVC' if 'libx265' in ffargs[qual] else 'AV1' if 'libaom-av1' in ffargs[qual] else 'AVC' if 'libx264' in ffargs[qual]
+        codec = 'HEVC' if 'libx265' in ffargs[qual] else 'AV1' if 'libaom-av1' in ffargs[qual] else 'AVC' if 'libx264' in ffargs[qual] else 'shit'
         lang = 'Multi-Audio' if 'multi-audio' in self.__name.lower() else 'Sub'
         anime_season = str(ani_s[-1]) if (ani_s := self.pdata.get('anime_season', '01')) and isinstance(ani_s, list) else str(ani_s)
         if anime_name and self.pdata.get("episode_number"):
